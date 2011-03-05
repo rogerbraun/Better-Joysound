@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>Joysound</title>
+  </head>
+
+  <body>
+    <h1>Joysound-Suche</h1>
+    <p>
+      <form action="/" method="get">
+        <input name="title" />
+      </form>
+    </p>
+    <% if @results %>
+      <table>
+      <tr>
+        <td>Title</td>
+        <td>Artist</td>
+        <td>Number</td>
+        <td>Utaidashi</td>
+      </tr>
+        <% @results.each do |result| %>
+          <tr>
+            <td><%= result[:title] %></td>
+            <td><%= result[:artist] %></td>
+            <td><%= result[:number] %></td>
+            <td><%= result[:utaidashi] %></td>
+          </td>
+        <% end %>
+      </table>
+
+    <% end %>
+
+  </body>
+
+</html>
