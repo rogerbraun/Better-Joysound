@@ -7,7 +7,7 @@ require "cgi"
 
 
 
-DataMapper.setup(:default, ENV['DATABASE_URL'] | "sqlite:test.db")
+DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite:test.db")
 
 
 class Song
