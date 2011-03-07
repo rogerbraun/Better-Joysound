@@ -24,9 +24,7 @@
 <script type="text/javascript">
 
   function update_results(data){
-    if(data == "true"){
       $.get("search",{query: "<%= params[:query] %>"}, function (text){$("#results").html(text);}); 
-    };
   };
   function update_periodically(){
     $.get("running", {query: "<%= params[:query] %>"}, update_results);
