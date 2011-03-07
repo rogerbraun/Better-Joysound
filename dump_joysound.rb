@@ -50,7 +50,11 @@ class Joysound
     s.finished = false
     s.save
 
+    begin
     load_song_links_from_artist_page("http://joysound.com/ex/search/songsearch.htm?keyWord=#{CGI::escape(title)}", threaded, n, title)
+    rescue => e
+      STDERR.puts e
+    end
 
     s.finished = true
     s.save
@@ -116,7 +120,15 @@ class Joysound
 
   def self.load_song_links_from_artist_page(url, threaded, n, title)
     STDERR.puts "Reading links..."
-    parsed = Nokogiri::HTML(open(url))
+    parsed = nil
+    while(!parsed) do
+      begin 
+        parsed = Nokogiri::HTML(open(url))
+      rescue OpenURI::HTTPError
+        STDERR.puts "Waiting for #{url}..."
+        sleep 0.5
+      end
+    end
     links = parsed.css(".wii a")
       threaded ? self.load_links_threaded(links, title, n) : self.load_links(links,title)
     if parsed.text["次の20件"] then 
@@ -127,24 +139,6 @@ class Joysound
     links
   end
 
-  def self.songs_from_artist_page(url)
-    parsed = Nokogiri::HTML(open(url))
-    links = parsed.css(".wii a")
-    STDERR.puts "Reading links..."
-    threads = []
-    links.each do |link| 
-      threads << Thread.new { 
-        self.data_from_page("http://joysound.com" + link.attribute("href"))
-      }
-    end
-    res = threads.map(&:value)
-    if parsed.text["次の20件"] then 
-      link = parsed.css(".transitionLinks03 li:last-of-type a")
-      STDERR.puts "Found more, reading #{link.attribute('href')}"
-      res += self.songs_from_artist_page("http://joysound.com" + link.attribute("href"))
-    end
-    res
-  end
 
   def self.artists_from_letter_page(url)
 
