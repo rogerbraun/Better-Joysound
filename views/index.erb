@@ -33,7 +33,7 @@
   function update_periodically(){
     $.get("running", {query: "<%= params[:query] %>"}, update_results);
   }
-  var holdTheInterval = setInterval(update_results("x"), 3000);
+  var holdTheInterval = setInterval(update_periodically, 3000);
 
 </script>
 
