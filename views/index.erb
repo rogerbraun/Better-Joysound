@@ -14,7 +14,7 @@
         <input name="title" />
       </form>
     </p>
-    <% if @results %>
+    <% if not @results.empty? %>
       <table>
       <tr>
         <td>Title</td>
