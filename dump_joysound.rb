@@ -27,6 +27,7 @@ class Keyword
 
   property :id, Serial
   property :keyword, String
+  property :kind, String
 
   has n, :songs, :through => Resource
 end
@@ -51,7 +52,7 @@ class Joysound
     s.save
 
     begin
-    load_song_links_from_artist_page("http://joysound.com/ex/search/songsearch.htm?keyWord=#{CGI::escape(title)}", threaded, n, title)
+    load_song_links_from_artist_page("http://joysound.com/ex/search/songsearch.htm?keyWord=#{CGI::escape(title)}","title",  threaded, n, title)
     rescue => e
       STDERR.puts e
     end
@@ -66,7 +67,7 @@ class Joysound
     s.save
 
     begin
-      load_artists_from_letter_page("http://joysound.com/ex/search/artistsearch.htm?keyWord=#{CGI::escape(query)}", threaded, n, query)
+      load_artists_from_letter_page("http://joysound.com/ex/search/artistsearch.htm?keyWord=#{CGI::escape(query)}", "artist", threaded, n, query)
     rescue => e
       STDERR.puts e
     end
@@ -75,7 +76,7 @@ class Joysound
     s.save
   end
 
-  def self.load_links(links,keyword)
+  def self.load_links(links, kind, keyword)
     links = links.map{|link| link.attribute("href")}
     links.each do |link|
        res = self.data_from_page("http://joysound.com/" + link)
@@ -83,7 +84,7 @@ class Joysound
     end
   end
 
-  def self.load_links_threaded(links, keyword, n = 4)
+  def self.load_links_threaded(links, kind, keyword, n = 4)
     links = links.map{|link| link.attribute("href")}
 
     semaphore = Mutex.new
@@ -93,7 +94,7 @@ class Joysound
         Thread.new(link, semaphore){ |url, semaphore| 
           res = self.data_from_page("http://joysound.com/" + url) 
           semaphore.synchronize {
-            self.save_to_db(res,keyword)
+            self.save_to_db(res,keyword, kind)
             sleep 0.5
           }    
         }
@@ -102,10 +103,10 @@ class Joysound
     end
   end
 
-  def self.save_to_db(res, keyword)
+  def self.save_to_db(res, keyword, kind)
     song = Song.first_or_create(res)
     puts song
-    kw = Keyword.first(:keyword.like => "#{keyword}%") || Keyword.create(:keyword => keyword)
+    kw = Keyword.first_or_create(:keyword => keyword, :kind => kind)
     puts kw
     kw.songs << song
     kw.save
@@ -134,7 +135,7 @@ class Joysound
     res
   end
 
-  def self.load_song_links_from_artist_page(url, threaded, n, title)
+  def self.load_song_links_from_artist_page(url, kind, threaded, n, title)
     STDERR.puts "Reading links..."
     parsed = nil
     while(!parsed) do
@@ -146,16 +147,16 @@ class Joysound
       end
     end
     links = parsed.css(".wii a")
-      threaded ? self.load_links_threaded(links, title, n) : self.load_links(links,title)
+      threaded ? self.load_links_threaded(links, kind,  title, n) : self.load_links(links, kind, title)
     if parsed.text["次の20件"] then 
       link = parsed.css(".transitionLinks03 li:last-of-type a")
       STDERR.puts "Found more, reading #{link.attribute('href')}"
-      self.load_song_links_from_artist_page("http://joysound.com" + link.attribute("href"), threaded, n, title)
+      self.load_song_links_from_artist_page("http://joysound.com" + link.attribute("href"),kind, threaded, n, title)
     end
     links
   end
 
-  def self.load_artists_from_letter_page(url, threaded, n, query)
+  def self.load_artists_from_letter_page(url, kind, threaded, n, query)
 
     parsed = nil
     while(!parsed) do
@@ -169,13 +170,13 @@ class Joysound
     links = parsed.css(".wii a")
     STDERR.puts "Reading links..."
     res = links.map do |link| 
-      self.load_song_links_from_artist_page("http://joysound.com" + link.attribute("href"), threaded, n, query)
+      self.load_song_links_from_artist_page("http://joysound.com" + link.attribute("href"), kind, threaded, n, query)
     end
       
     if parsed.text["次の20件"] then 
       link = parsed.css(".transitionLinks03 li:last-of-type a")
       STDERR.puts "Found more, reading #{link.attribute('href')}"
-      res += self.artists_from_letter_page("http://joysound.com" + link.attribute("href"))
+      self.load_artists_from_letter_page("http://joysound.com" + link.attribute("href"), kind, threaded, n, query)
     end
 
     res

@@ -28,12 +28,12 @@
 <script type="text/javascript">
 
   function update_results(data){
-      $.get("search",{query: "<%= params[:query] %>"}, function (text){$("#results").html(text);}); 
+      $.get("search",{query: "<%= params[:query] %>", kind: "<%= params[:kind] %>"}, function (text){$("#results").html(text);}); 
   };
   function update_periodically(){
     $.get("running", {query: "<%= params[:query] %>"}, update_results);
   }
-  var holdTheInterval = setInterval(update_periodically, 3000);
+  var holdTheInterval = setInterval(update_results("x"), 3000);
 
 </script>
 

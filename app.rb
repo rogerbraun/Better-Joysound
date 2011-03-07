@@ -7,7 +7,7 @@ require "./dump_joysound.rb"
 get "/" do
   if params[:query] then
     
-    @results = Keyword.all(:keyword.like => params[:query]).map(&:songs).flatten.uniq
+    @results = Keyword.all(:keyword.like => params[:query], :kind.like => params[:kind]).map(&:songs).flatten.uniq
     puts  "results"
 
     if not @results.empty? then
@@ -17,8 +17,8 @@ get "/" do
         @ongoing = !SearchProgress.first(:keyword => params[:query], :finished => true)
       else
         Thread.new {
-          Joysound.search_by_title(params[:query], true) if params[:kind] == "title"
-          Joysound.search_by_artist(params[:query], true) if params[:kind] == "artist"
+          Joysound.search_by_title(params[:query],  true) if params[:kind] == "title"
+          Joysound.search_by_artist(params[:query],  true) if params[:kind] == "artist"
         }
         @ongoing = true  
       end
@@ -35,6 +35,6 @@ end
 
 get "/search" do
   @ongoing = SearchProgress.first(:keyword => params[:query], :finished => false)
-  @results = Keyword.all(:keyword.like => params[:query]).map(&:songs).flatten.uniq
+  @results = Keyword.all(:keyword.like => params[:query], :kind.like => params[:kind]).map(&:songs).flatten.uniq
   erb :results
 end
