@@ -99,6 +99,7 @@ class Joysound
       begin 
         parsed = Nokogiri::HTML(open(url))
       rescue OpenURI::HTTPError
+        STDERR.puts "Waiting for #{url}..."
         sleep 0.5
       end
     end

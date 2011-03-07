@@ -17,7 +17,7 @@ get "/" do
         @ongoing = !SearchProgress.first(:keyword => params[:title], :finished => true)
       else
         Thread.new {
-          Joysound.search_by_title(params[:title], true, 5)
+          Joysound.search_by_title(params[:title])
         }
         @ongoing = true  
       end
