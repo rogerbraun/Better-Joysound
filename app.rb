@@ -7,7 +7,7 @@ require "./dump_joysound.rb"
 get "/" do
   if params[:title] then
     
-    @results = Keyword.all(:keyword => params[:title]).map(&:songs).flatten.uniq
+    @results = Keyword.all(:keyword.like => params[:title]).map(&:songs).flatten.uniq
     puts  "results"
 
     if not @results.empty? then
