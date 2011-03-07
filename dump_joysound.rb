@@ -90,7 +90,7 @@ class Joysound
     
     links.each_slice(n) do |slice|
       threads = slice.map do |link|
-        Thread.new(link){ |url| 
+        Thread.new(link, semaphore){ |url, semaphore| 
           res = self.data_from_page("http://joysound.com/" + url) 
           semaphore.synchronize {
             self.save_to_db(res,keyword)

@@ -1,10 +1,7 @@
 <html>
   <head>
     <title>Joysound</title>
-    <% if @ongoing %>
-      <meta http-equiv="refresh" content="2; URL=<%= request.url.gsub(";ongoing=1","") %>;ongoing=1">
-    <% end %>
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
   </head>
 
   <body>
@@ -18,32 +15,25 @@
         </select>
       </form>
     </p>
-    <% if @results %>
-      <table>
-      <tr>
-        <td>Title</td>
-        <td>Artist</td>
-        <td>Number</td>
-        <td>Utaidashi</td>
-      </tr>
-        <% @results.each do |result| %>
-          <tr>
-            <td><%= result.title %></td>
-            <td><%= result.artist %></td>
-            <td><%= result.number %></td>
-            <td><%= result.utaidashi %></td>
-          </td>
-        <% end %>
-        <% if @ongoing %>
-          <tr>
-            <td colspan="4">
-              <p>Suche weiter...</p>
-            </td>
-          <tr>
-        <% end %>
-      </table>
+    <div id="results">
+      <% if @results %>
+        <%= erb :results %>
+      <% end %>
+    </div>
 
-    <% end %>
+<script type="text/javascript">
+
+  function update_results(data){
+    if(data == "true"){
+      $.get("search",{query: "<%= params[:query] %>"}, function (text){$("#results").html(text);}); 
+    };
+  };
+  function update_periodically(){
+    $.get("running", {query: "<%= params[:query] %>"}, update_results);
+  }
+  var holdTheInterval = setInterval(update_periodically, 3000);
+
+</script>
 
   </body>
 

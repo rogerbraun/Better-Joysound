@@ -28,3 +28,13 @@ get "/" do
   erb :index
 end
 
+get "/running" do
+  SearchProgress.first(:keyword => params[:query], :finished => false) ? "true" : "false"
+end
+
+
+get "/search" do
+  @ongoing = SearchProgress.first(:keyword => params[:query], :finished => false)
+  @results = Keyword.all(:keyword.like => params[:query]).map(&:songs).flatten.uniq
+  erb :results
+end
