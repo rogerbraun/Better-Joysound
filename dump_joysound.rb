@@ -60,6 +60,21 @@ class Joysound
     s.save
   end
 
+  def self.search_by_artist(query, threaded = false, n = 4)
+    s = SearchProgress.first_or_create(:keyword => query)
+    s.finished = false
+    s.save
+
+    begin
+      load_artists_from_letter_page("http://joysound.com/ex/search/artistsearch.htm?keyWord=#{CGI::escape(query)}", threaded, n, query)
+    rescue => e
+      STDERR.puts e
+    end
+
+    s.finished = true
+    s.save
+  end
+
   def self.load_links(links,keyword)
     links = links.map{|link| link.attribute("href")}
     links.each do |link|
@@ -79,6 +94,7 @@ class Joysound
           res = self.data_from_page("http://joysound.com/" + url) 
           semaphore.synchronize {
             self.save_to_db(res,keyword)
+            sleep 0.5
           }    
         }
       end
@@ -139,6 +155,51 @@ class Joysound
     links
   end
 
+  def self.load_artists_from_letter_page(url, threaded, n, query)
+
+    parsed = nil
+    while(!parsed) do
+      begin 
+        parsed = Nokogiri::HTML(open(url))
+      rescue OpenURI::HTTPError
+        STDERR.puts "Waiting for #{url}..."
+        sleep 0.5
+      end
+    end
+    links = parsed.css(".wii a")
+    STDERR.puts "Reading links..."
+    res = links.map do |link| 
+      self.load_song_links_from_artist_page("http://joysound.com" + link.attribute("href"), threaded, n, query)
+    end
+      
+    if parsed.text["次の20件"] then 
+      link = parsed.css(".transitionLinks03 li:last-of-type a")
+      STDERR.puts "Found more, reading #{link.attribute('href')}"
+      res += self.artists_from_letter_page("http://joysound.com" + link.attribute("href"))
+    end
+
+    res
+
+  end
+  def self.artists_from_letter_page(url)
+
+    parsed = Nokogiri::HTML(open(url))
+    links = parsed.css(".wii a")
+    STDERR.puts "Reading links..."
+    res = links.map do |link| 
+      self.songs_from_artist_page("http://joysound.com" + link.attribute("href"))
+    end
+      
+    if parsed.text["次の20件"] then 
+      link = parsed.css(".transitionLinks03 li:last-of-type a")
+      STDERR.puts "Found more, reading #{link.attribute('href')}"
+      res += self.artists_from_letter_page("http://joysound.com" + link.attribute("href"))
+    end
+
+    res
+
+  end
+
 
   def self.artists_from_letter_page(url)
 
@@ -160,3 +221,4 @@ class Joysound
   end
     
 end
+

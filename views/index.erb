@@ -11,7 +11,11 @@
     <h1>Joysound-Suche</h1>
     <p>
       <form action="/" method="get">
-        <input name="title" />
+        <input name="query" />
+        <select name="kind">
+          <option value="title">Titel</option>
+          <option value="artist">Künstler</option>
+        </select>
       </form>
     </p>
     <% if @results %>
