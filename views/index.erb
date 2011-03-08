@@ -15,7 +15,7 @@
         <input name="query" />
         <select name="kind">
           <option value="title">Titel</option>
-          <option value="artist">Künstler</option>
+          <option value="artist" <%= "selected='1'" if params[:kind] == "artist" %>>Künstler</option>
         </select>
       </form>
     </p>
