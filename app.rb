@@ -6,6 +6,7 @@ require "./dump_joysound.rb"
 
 get "/" do
   if params[:query] then
+    params[:query].downcase!
     
     @results = Keyword.all(:keyword.like => params[:query], :kind.like => params[:kind]).map(&:songs).flatten.uniq
     puts  "results"
