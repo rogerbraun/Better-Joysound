@@ -25,6 +25,7 @@
     <div id="remembered">
       <% if @remembered and not @remembered.empty? then %>
         <h2>Gemerkte Songs</h2>
+        <h3><a href='<%= url "/song/txt" %>'>Als Textdatei herunterladen</a></h3>
         <table>
         <tr>
           <td>Title</td>

@@ -57,6 +57,12 @@ post "/song/:id/forget" do
   songs = request.cookies["songs"] || ""
   songs = songs.split(",").reject{|el| el == (params[:id])}.uniq.join(",") 
   puts songs
-  response.set_cookie "songs", :value => songs, :domain => "", :path => "/"
+  response.set_cookie "songs", :value => songs, :domain => ENV["URL"] || "", :path => "/"
   redirect back
+end
+
+get "/song/txt" do
+  attachment("joysound.txt")
+  @remembered = Song.all(:number => request.cookies["songs"].split(",")) 
+  @remembered.map{|song| "#{song.artist} - #{song.title}: #{song.number}"}.join("\n")
 end
