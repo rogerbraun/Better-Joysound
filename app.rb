@@ -30,6 +30,8 @@ get "/" do
   if request.cookies["songs"]
     puts request.cookies["songs"]
     @remembered = Song.all(:number => request.cookies["songs"].split(",")) 
+    @results -= @remembered if @results
+
   end
   erb :index
 end
@@ -38,10 +40,18 @@ get "/running" do
   SearchProgress.first(:keyword => params[:query], :finished => false) ? "true" : "false"
 end
 
-
+get "/search/live" do
+  SearchProgress.all.map(&:keyword).reverse.join("<br >")
+end
+  
 get "/search" do
   @ongoing = SearchProgress.first(:keyword => params[:query], :finished => false)
   @results = Keyword.all(:keyword.like => params[:query], :kind.like => params[:kind]).map(&:songs).flatten.uniq
+  if request.cookies["songs"]
+    puts request.cookies["songs"]
+    @remembered = Song.all(:number => request.cookies["songs"].split(",")) 
+    @results -= @remembered if @results
+  end
   erb :results
 end
 
