@@ -57,7 +57,7 @@ post "/song/:id/forget" do
   songs = request.cookies["songs"] || ""
   songs = songs.split(",").reject{|el| el == (params[:id])}.uniq.join(",") 
   puts songs
-  response.set_cookie "songs", :value => songs, :domain => ENV["URL"] || "", :path => "/"
+  response.set_cookie "songs", :value => songs, :domain => "", :path => "/"
   redirect back
 end
 
