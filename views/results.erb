@@ -5,6 +5,7 @@
                 <td>Artist</td>
                 <td>Utaidashi</td>
                 <td>Number</td>
+                <td>Merken</td>
               </tr>
                 <% @results.each do |result| %>
                   <tr>
@@ -12,6 +13,8 @@
                     <td><%= result.artist %></td>
                     <td><%= result.utaidashi %></td>
                     <td><b><%= result.number %></b></td>
+                    <td>
+                    <form method="post" action="<%= url "/song/#{result.number}/remember"%>"><button>Merken</button></form></td>
                   </td>
                 <% end %>
                 <% if @ongoing %>

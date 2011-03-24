@@ -22,6 +22,31 @@
         </select>
       </form>
     </p>
+    <div id="remembered">
+      <% if @remembered and not @remembered.empty? then %>
+        <h2>Gemerkte Songs</h2>
+        <table>
+        <tr>
+          <td>Title</td>
+          <td>Artist</td>
+          <td>Utaidashi</td>
+          <td>Number</td>
+          <td>Vergessen</td>
+        </tr>
+          <% @remembered.each do |result| %>
+            <tr>
+              <td><%= result.title %></td>
+              <td><%= result.artist %></td>
+              <td><%= result.utaidashi %></td>
+              <td><b><%= result.number %></b></td>
+              <td>
+              <form method="post" action="<%= url "/song/#{result.number}/forget"%>"><button>Vergessen</button></form></td>
+            </td>
+          <% end %>
+        </table>
+      <% end %>
+    </div>
+    <h2>Gesuchte Songs</h2>
     <div id="results">
       <% if @results %>
         <%= erb :results %>

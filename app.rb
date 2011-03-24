@@ -26,6 +26,11 @@ get "/" do
     end
       
   end
+
+  if request.cookies["songs"]
+    puts request.cookies["songs"]
+    @remembered = Song.all(:number => request.cookies["songs"].split(",")) 
+  end
   erb :index
 end
 
@@ -38,4 +43,20 @@ get "/search" do
   @ongoing = SearchProgress.first(:keyword => params[:query], :finished => false)
   @results = Keyword.all(:keyword.like => params[:query], :kind.like => params[:kind]).map(&:songs).flatten.uniq
   erb :results
+end
+
+post "/song/:id/remember" do
+  songs = request.cookies["songs"] || ""
+  songs = songs.split(",").push(params[:id]).uniq.join(",") 
+  puts songs
+  response.set_cookie "songs", :value => songs, :domain => "", :path => "/"
+  redirect back
+end
+
+post "/song/:id/forget" do
+  songs = request.cookies["songs"] || ""
+  songs = songs.split(",").reject{|el| el == (params[:id])}.uniq.join(",") 
+  puts songs
+  response.set_cookie "songs", :value => songs, :domain => "", :path => "/"
+  redirect back
 end
