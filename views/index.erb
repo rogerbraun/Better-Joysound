@@ -12,7 +12,15 @@
   </head>
 
   <body>
-    <h1>Joysound-Suche</h1>
+    <h1>Joysound-Suche</h1 >
+    <% if logged_in? %>
+      <h4><%=  current_user.email%></h4>
+      <form method="post" action="<%= url '/user/logout' %>">
+        <button>Abmelden</button>
+      </form>
+    <% else %>
+      <a href='<%= url "/user/new" %>'>Anmelden</a>
+    <% end %>
     <p>
       <form action="/" method="get">
         <input name="query" />

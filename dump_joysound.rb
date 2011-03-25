@@ -6,7 +6,6 @@ require "dm-migrations"
 require "cgi"
 require "thread"
 
-DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite:test.db")
 
 class Song
   include DataMapper::Resource
@@ -41,7 +40,6 @@ class SearchProgress
   
 end
 
-DataMapper.auto_upgrade!
   
 
 class Joysound
