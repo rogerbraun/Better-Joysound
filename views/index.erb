@@ -30,6 +30,12 @@
         </select>
       </form>
     </p>
+    <h2>Gesuchte Songs</h2>
+    <div id="results">
+      <% if @results %>
+        <%= erb :results %>
+      <% end %>
+    </div>
     <div id="remembered">
       <% if @remembered and not @remembered.empty? then %>
         <h2>Gemerkte Songs</h2>
@@ -53,12 +59,6 @@
             </td>
           <% end %>
         </table>
-      <% end %>
-    </div>
-    <h2>Gesuchte Songs</h2>
-    <div id="results">
-      <% if @results %>
-        <%= erb :results %>
       <% end %>
     </div>
 
