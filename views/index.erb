@@ -64,13 +64,18 @@
 
 <script type="text/javascript">
 
-  function update_results(data){
+  function update_results(){
       $.get("search",{query: "<%= params[:query] %>", kind: "<%= params[:kind] %>"}, function (text){$("#results").html(text);}); 
   };
-  function update_periodically(){
-    $.get("running", {query: "<%= params[:query] %>"}, update_results);
+  function update_periodically(interval){
+    $.get("running", {query: "<%= params[:query] %>"}, function(data){
+      if(data == "false"){
+        clearInterval(interval);
+      }
+      update_results();
+    });
   }
-  var holdTheInterval = setInterval(update_periodically, 3000);
+  var holdTheInterval = setInterval(function(){update_periodically(holdTheInterval)}, 3000);
 
 </script>
 
