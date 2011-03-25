@@ -75,7 +75,11 @@
       update_results();
     });
   }
-  var holdTheInterval = setInterval(function(){update_periodically(holdTheInterval)}, 3000);
+  $.get("running", {query: "<%= params[:query] %>"}, function(data){
+    if(data == "true"){
+      var holdTheInterval = setInterval(function(){update_periodically(holdTheInterval)}, 3000);
+    }
+  });
 
 </script>
 
