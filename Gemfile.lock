@@ -1,0 +1,48 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    addressable (2.2.4)
+    backports (2.0.2)
+    data_objects (0.10.3)
+      addressable (~> 2.1)
+    dm-core (1.1.0)
+      addressable (~> 2.2.4)
+    dm-do-adapter (1.1.0)
+      data_objects (~> 0.10.2)
+      dm-core (~> 1.1.0)
+    dm-migrations (1.1.0)
+      dm-core (~> 1.1.0)
+    dm-postgres-adapter (1.1.0)
+      dm-do-adapter (~> 1.1.0)
+      do_postgres (~> 0.10.2)
+    do_postgres (0.10.3)
+      data_objects (= 0.10.3)
+    monkey-lib (0.5.4)
+      backports
+    nokogiri (1.4.4)
+    rack (1.2.2)
+    sinatra (1.2.1)
+      rack (~> 1.1)
+      tilt (< 2.0, >= 1.2.2)
+    sinatra-advanced-routes (0.5.1)
+      monkey-lib (~> 0.5.0)
+      sinatra (~> 1.0)
+      sinatra-sugar (~> 0.5.0)
+    sinatra-reloader (0.5.0)
+      sinatra (~> 1.0)
+      sinatra-advanced-routes (~> 0.5.0)
+    sinatra-sugar (0.5.0)
+      monkey-lib (~> 0.5.0)
+      sinatra (~> 1.0)
+    tilt (1.2.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  dm-core
+  dm-migrations
+  dm-postgres-adapter
+  nokogiri
+  sinatra
+  sinatra-reloader

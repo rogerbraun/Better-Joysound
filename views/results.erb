@@ -14,7 +14,7 @@
                     <td><%= result.utaidashi %></td>
                     <td><b><%= result.number %></b></td>
                     <td>
-                    <form method="post" action="<%= url "/song/#{result.number}/remember"%>"><button>Merken</button></form></td>
+                    <form method="post" action="<%= url "/song/#{result.number}/remember"%>"><button class="remember" value="<%=result.number %>"> Merken</button></form></td>
                   </td>
                 <% end %>
                 <% if @ongoing %>
