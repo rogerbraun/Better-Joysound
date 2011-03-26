@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>Joysound</title>
@@ -48,7 +49,7 @@
     </div>
     <div id="main">
       <p>
-        <form action="/" method="get">
+        <form action="<%= url '/' %>" method="get">
           <input name="query" value="<%= params[:query] %>"/>
           <select name="kind">
             <option value="title">Titel</option>
@@ -58,7 +59,6 @@
           <input type="checkbox" name="force" value="true"/> Frische Suche erzwingen (<a onclick="toggle('message')" href="javascript:void('0')">Was heißt das?</a>)
         </form>
           <p id="message">Wenn es für deine Suchanfrage schon Daten in der internen Datenbank gibt werden diese sofort angezeigt und es findet keine Suchanfrage bei Joysound.com mehr statt. Wenn du denkst das es neue Lieder bei Joysound gibt kannst du aber durch diese Schaltfläche eine aktualisierung der Datenbank über Joysound.com erzwingen.<br /><button onclick="toggle('message')">Ach so...</button></p>
-      </p>
       <div id="results">
         <% if @results %>
           <%= erb :results %>
