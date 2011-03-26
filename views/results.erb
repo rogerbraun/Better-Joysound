@@ -1,5 +1,6 @@
 <% if @results and not @results.empty? then %>
   <h2>Gesuchte Songs</h2>
+  <h3><%= "#{@count[:all]} Ergebnisse, #{@count[:remembered]} davon gemerkt." %></h3>
   <table>
   <tr>
     <td>Title</td>
@@ -16,7 +17,6 @@
         <td><b><%= result.number %></b></td>
         <td>
         <form method="post" action="<%= url "/song/#{result.number}/remember"%>"><button class="remember" value="<%=result.number %>"> Merken</button></form></td>
-      </td>
     <% end %>
   </table>
 <% end %>

@@ -17,7 +17,6 @@
         <td><b><%= result.number %></b></td>
         <td>
         <form method="post" action="<%= url "/song/#{result.number}/forget"%>"><button class='forget' value="<%= result.number%>">Vergessen</button></form></td>
-      </td>
     <% end %>
   </table>
 <% end %>

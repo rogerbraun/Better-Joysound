@@ -54,9 +54,7 @@ get "/" do
   if params[:query] then
     params[:query].downcase!
     
-    @results = Keyword.all(:keyword.like => params[:query], :kind.like => params[:kind]).map(&:songs).flatten.uniq
-    puts  "results"
-
+    @results = Keyword.all(:keyword.like => params[:query], :kind.like => params[:kind]).map(&:songs).flatten.uniq 
     if (not @results.empty?) and (not params[:force]) then
       @ongoing = SearchProgress.first(:keyword => params[:query], :finished => false)
     else
@@ -71,11 +69,14 @@ get "/" do
       end
     end
   end
-
+  @results ||= []
+  @count = {:all => @results.size}
   if not get_songs.empty?
     @remembered = Song.all(:number => get_songs) 
     @results -= @remembered if @results
   end
+  @remembered ||= []
+  @count[:remembered] = @count[:all] - @results.size
   erb :index
 end
 
@@ -113,10 +114,13 @@ end
 get "/search" do
   @ongoing = SearchProgress.first(:keyword => params[:query], :finished => false)
   @results = Keyword.all(:keyword.like => params[:query], :kind.like => params[:kind]).map(&:songs).flatten.uniq
+  @count = {:all => @results.size}
   if not get_songs.empty?
     @remembered = Song.all(:number => get_songs)
     @results -= @remembered if @results
   end
+  @remembered ||= []
+  @count[:remembered] = @count[:all] - @results.size
   erb :results
 end
 
