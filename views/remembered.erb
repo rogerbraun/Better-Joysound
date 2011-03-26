@@ -13,7 +13,7 @@
           <% @remembered.each do |result| %>
             <tr>
               <td><%= result.title %></td>
-              <td><%= result.artist %></td>
+              <td><a href="<%=url "/?query=#{CGI::escape(result.artist)}&kind=artist"%>"><%= result.artist %></a></td>
               <td><%= result.utaidashi %></td>
               <td><b><%= result.number %></b></td>
               <td>

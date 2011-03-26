@@ -3,6 +3,7 @@ require "sinatra"
 require "sinatra/reloader" if development?
 require "erb"
 require "./dump_joysound.rb"
+require "cgi"
 
 class User
   include DataMapper::Resource
