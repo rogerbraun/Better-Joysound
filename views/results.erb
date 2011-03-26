@@ -1,27 +1,25 @@
-
-              <table>
-              <tr>
-                <td>Title</td>
-                <td>Artist</td>
-                <td>Utaidashi</td>
-                <td>Number</td>
-                <td>Merken</td>
-              </tr>
-                <% @results.each do |result| %>
-                  <tr>
-                    <td><%= result.title %></td>
-                    <td><a href="<%=url "/?query=#{CGI::escape(result.artist)}&kind=artist"%>"><%= result.artist %></a></td>
-                    <td><%= result.utaidashi %></td>
-                    <td><b><%= result.number %></b></td>
-                    <td>
-                    <form method="post" action="<%= url "/song/#{result.number}/remember"%>"><button class="remember" value="<%=result.number %>"> Merken</button></form></td>
-                  </td>
-                <% end %>
-                <% if @ongoing %>
-                  <tr>
-                    <td colspan="4">
-                      <img src="/ajax-loader.gif" />
-                    </td>
-                  <tr>
-                <% end %>
-              </table>
+<% if @results and not @results.empty? then %>
+  <h2>Gesuchte Songs</h2>
+  <table>
+  <tr>
+    <td>Title</td>
+    <td>Artist</td>
+    <td>Utaidashi</td>
+    <td>Number</td>
+    <td>Merken</td>
+  </tr>
+    <% @results.each do |result| %>
+      <tr>
+        <td><%= result.title %></td>
+        <td><a href="<%=url "/?query=#{CGI::escape(result.artist)}&kind=artist"%>"><%= result.artist %></a></td>
+        <td><%= result.utaidashi %></td>
+        <td><b><%= result.number %></b></td>
+        <td>
+        <form method="post" action="<%= url "/song/#{result.number}/remember"%>"><button class="remember" value="<%=result.number %>"> Merken</button></form></td>
+      </td>
+    <% end %>
+  </table>
+<% end %>
+<% if @ongoing %>
+  <img style="margin-left: auto; margin-right:auto; display:block;" src="/ajax-loader.gif" />
+<% end %>

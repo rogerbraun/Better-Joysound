@@ -1,4 +1,4 @@
-var addRemembered, removeRemembered, setTimers, updateBoth, updatePeriodically, updateResults, watchButtons;
+var addRemembered, removeRemembered, setTimers, toggle, updateBoth, updatePeriodically, updateResults, watchButtons;
 updateResults = function(query, kind) {
   return $.get("search", {
     query: query,
@@ -66,4 +66,14 @@ updateBoth = function() {
   }, (function(text) {
     return $("#results").html(text);
   }));
+};
+toggle = function(element) {
+  var el;
+  el = document.getElementById(element);
+  if (el.style.display === "" || el.style.display === "none") {
+    el.style.display = "block";
+  } else {
+    el.style.display = "none";
+  }
+  return false;
 };

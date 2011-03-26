@@ -57,7 +57,7 @@ get "/" do
     @results = Keyword.all(:keyword.like => params[:query], :kind.like => params[:kind]).map(&:songs).flatten.uniq
     puts  "results"
 
-    if not @results.empty? then
+    if (not @results.empty?) and (not params[:force]) then
       @ongoing = SearchProgress.first(:keyword => params[:query], :finished => false)
     else
       if params[:ongoing]
@@ -130,14 +130,14 @@ end
 post "/song/:id/remember" do
   songs = get_songs.push(params[:id])
   set_songs(songs)
-  redirect back
+  !request.xhr? ? redirect(back) : "Remembered!"
 end
 
 post "/song/:id/forget" do
   songs = get_songs
   songs = songs.reject{|el| el == (params[:id])}
   set_songs(songs)
-  !request.xhr? ? redirect(back) : redirect(to("/remembered"))
+  !request.xhr? ? redirect(back) : "Forgotten!"
 end
 
 get "/song/txt" do

@@ -9,38 +9,66 @@
         tr {width: 100%;}
         td {width: 20%;}
 
+        #title {
+          width:70%;
+          float:left;
+        }
+
+        #user {
+          text-align: right;
+          width: 25%;
+          float:right;
+        }
+
+        #main {
+          clear:both;
+        }
+        #message {
+          display: none;
+        }
+
 </style>
   </head>
 
   <body>
-    <h1>Joysound-Suche</h1 >
+    <div id="title">
+      <h1>Joysound-Suche</h1 >
+    </div>
+    <div id="user">
     <% if logged_in? %>
       <h4><%=  current_user.email%></h4>
       <form method="post" action="<%= url '/user/logout' %>">
         <button>Abmelden</button>
       </form>
     <% else %>
-      <a href='<%= url "/user/new" %>'>Anmelden</a>
+      <p>
+        <a href='<%= url "/user/new" %>'>Anmelden</a>
+      </p>
     <% end %>
-    <p>
-      <form action="/" method="get">
-        <input name="query" />
-        <select name="kind">
-          <option value="title">Titel</option>
-          <option value="artist" <%= "selected='1'" if params[:kind] == "artist" %>>Künstler</option>
-        </select>
-      </form>
-    </p>
-    <h2>Gesuchte Songs</h2>
-    <div id="results">
-      <% if @results %>
-        <%= erb :results %>
-      <% end %>
     </div>
-    <div id="remembered">
-      <% if @remembered%>
-        <%= erb :remembered %>
-      <% end %>
+    <div id="main">
+      <p>
+        <form action="/" method="get">
+          <input name="query" value="<%= params[:query] %>"/>
+          <select name="kind">
+            <option value="title">Titel</option>
+            <option value="artist" <%= "selected='1'" if params[:kind] == "artist" %>>Künstler</option>
+          </select>
+          <button>Suchen!</button>
+          <input type="checkbox" name="force" value="true"/> Frische Suche erzwingen (<a onclick="toggle('message')" href="javascript:void('0')">Was heißt das?</a>)
+        </form>
+          <p id="message">Wenn es für deine Suchanfrage schon Daten in der internen Datenbank gibt werden diese sofort angezeigt und es findet keine Suchanfrage bei Joysound.com mehr statt. Wenn du denkst das es neue Lieder bei Joysound gibt kannst du aber durch diese Schaltfläche eine aktualisierung der Datenbank über Joysound.com erzwingen.<br /><button onclick="toggle('message')">Ach so...</button></p>
+      </p>
+      <div id="results">
+        <% if @results %>
+          <%= erb :results %>
+        <% end %>
+      </div>
+      <div id="remembered">
+        <% if @remembered%>
+          <%= erb :remembered %>
+        <% end %>
+      </div>
     </div>
 
 <script type="text/javascript">
