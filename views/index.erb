@@ -49,8 +49,8 @@
     </div>
     <div id="main">
       <p>
-        <form action="<%= url '/' %>" method="get">
-          <input name="query" value="<%= params[:query] %>"/>
+        <form onsubmit="return osterhase(this)" action="<%= url '/' %>" method="get">
+          <input id="query" name="query" value="<%= params[:query] %>"/>
           <select name="kind">
             <option value="title">Titel</option>
             <option value="artist" <%= "selected='1'" if params[:kind] == "artist" %>>Künstler</option>

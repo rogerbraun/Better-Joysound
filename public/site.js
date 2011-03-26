@@ -1,4 +1,4 @@
-var addRemembered, removeRemembered, setTimers, toggle, updateBoth, updatePeriodically, updateResults, watchButtons;
+var addRemembered, osterhase, removeRemembered, setTimers, toggle, updateBoth, updatePeriodically, updateResults, watchButtons;
 updateResults = function(query, kind) {
   return $.get("search", {
     query: query,
@@ -76,4 +76,14 @@ toggle = function(element) {
     el.style.display = "none";
   }
   return false;
+};
+osterhase = function(form) {
+  var text;
+  text = form.query.value.toLowerCase();
+  if (text === "osterhase") {
+    alert("OSTERHASE!!!!");
+    return false;
+  } else {
+    return true;
+  }
 };
