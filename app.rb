@@ -72,7 +72,7 @@ get "/" do
   @results ||= []
   @count = {:all => @results.size}
   if not get_songs.empty?
-    @remembered = Song.all(:number => get_songs) 
+    @remembered = Song.all(:number => get_songs, :order => :artist) 
     @results -= @remembered if @results
   end
   @remembered ||= []
@@ -116,7 +116,7 @@ get "/search" do
   @results = Keyword.all(:keyword.like => params[:query], :kind.like => params[:kind]).map(&:songs).flatten.uniq
   @count = {:all => @results.size}
   if not get_songs.empty?
-    @remembered = Song.all(:number => get_songs)
+    @remembered = Song.all(:number => get_songs, :order => :artist)
     @results -= @remembered if @results
   end
   @remembered ||= []
@@ -126,7 +126,7 @@ end
 
 get "/remembered" do
   if not get_songs.empty?
-    @remembered = Song.all(:number => get_songs)
+    @remembered = Song.all(:number => get_songs, :order => :artist)
   end
   erb :remembered
 end
