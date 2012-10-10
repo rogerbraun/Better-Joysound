@@ -50,7 +50,8 @@ class Joysound
     s.save
 
     begin
-    load_song_links_from_artist_page("http://joysound.com/ex/search/songsearch.htm?keyWord=#{CGI::escape(title)}","title",  threaded, n, title)
+    load_song_links_from_artist_page("http://joysound.com/ex/search/songsearchword.htm?wiiall=1&searchType=01&searchWord=#{CGI::escape(title)}&searchWordType=2&searchLikeType=2", "title", threaded, n, title)
+    #load_song_links_from_artist_page("http://joysound.com/ex/search/songsearch.htm?keyWord=#{CGI::escape(title)}","title",  threaded, n, title)
     rescue => e
       STDERR.puts e
     end
@@ -65,7 +66,8 @@ class Joysound
     s.save
 
     begin
-      load_artists_from_letter_page("http://joysound.com/ex/search/artistsearch.htm?keyWord=#{CGI::escape(query)}", "artist", threaded, n, query)
+      load_artists_from_letter_page("http://joysound.com/ex/search/artistsearchword.htm?wiiall=1&searchType=01&searchWord=#{CGI::escape(query)}&searchWordType=1&searchLikeType=2", "artist", threaded, n, query)
+      #load_artists_from_letter_page("http://joysound.com/ex/search/artistsearch.htm?keyWord=#{CGI::escape(query)}", "artist", threaded, n, query)
     rescue => e
       STDERR.puts e
     end
